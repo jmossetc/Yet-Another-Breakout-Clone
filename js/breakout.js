@@ -21,7 +21,7 @@ var leftPressed = false;
 
 //Level init
 var levelPadding = 30
-var brickRowCount = 3;
+var brickRowCount = 5;
 var brickColumnCount = 10;
 var brickPadding = 5;
 var brickOffsetTop = 0;
