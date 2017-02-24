@@ -39,7 +39,7 @@ for (c = 0; c < brickColumnCount; c++) {
 
 //Paddle init 
 var paddleHeight = 10;
-var paddleWidth = 75;
+var paddleWidth = 200;
 var paddleSpeed = 2;
 var paddle = initPaddle(paddleHeight, paddleWidth, paddleSpeed)
 
@@ -108,7 +108,7 @@ function collisionDetection() {
         for (r = 0; r < brickRowCount; r++) {
             var b = bricks[c][r];
             if (bricks[c][r].durability > 0) {
-                if (ball.x > bricks[c][r].x && ball.x < bricks[c][r].x + brickWidth && ball.y > bricks[c][r].y && ball.y < bricks[c][r].y + brickHeight) {
+                if (ball.x > bricks[c][r].x - ball.ballRadius && ball.x < bricks[c][r].x + brickWidth + ball.ballRadius && ball.y > bricks[c][r].y - ball.ballRadius && ball.y < bricks[c][r].y + brickHeight + ball.ballRadius) {
                     ball.ySpeed = -ball.ySpeed;
                     bricks[c][r].durability--;
                     score++;
