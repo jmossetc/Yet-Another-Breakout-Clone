@@ -14,6 +14,7 @@ function initBall(xPos, yPos, xSpeed, ySpeed, ballRadius) {
         xSpeed: xSpeed,
         ySpeed: ySpeed,
         ballRadius: ballRadius,
+        maxSpeedPower2 : 8,
         drawBall: function () {
             ctx.beginPath();
             //draw a ball at (x,y)
@@ -35,8 +36,35 @@ function initBall(xPos, yPos, xSpeed, ySpeed, ballRadius) {
             }
             //if on bottom screen
             else if (this.y + this.ySpeed > canvas.height - this.ballRadius) {
-                if (this.x > paddle.paddleX && this.x < paddle.paddleX + paddle.paddleWidth) {
-                    this.ySpeed = -this.ySpeed;
+                //On paddle collision
+                if (this.x > paddle.paddleX + this.ballRadius && this.x < paddle.paddleX + paddle.paddleWidth + this.ballRadius) {
+                    console.log('xVector : ' + this.xSpeed);
+                    
+                    //1 represents a middle collision, 0 a collision on the left side of the paddle and 2 on the right side
+                    var collisionPercentage = ((this.x - paddle.paddleX) / paddle.paddleWidth )*2;
+                    if (collisionPercentage > 2){
+                        collisionPercentage = 2;
+                    }
+                    else if (collisionPercentage < 0){
+                        collisionPercentage = 0;
+                    }
+                    //If the ball is going left we make it like we calculate the percentage from the right instead of the left                    
+                    if(this.xSpeed < 0){
+                        collisionPercentage = 2 - collisionPercentage;
+                    }
+                    
+                    //Wer adjust the horizeontal speed with the collisionPercentage
+                    this.xSpeed = this.xSpeed * collisionPercentage; 
+                    var xSpeedPower2 = this.xSpeed * this.xSpeed;
+                    //We are trying to always keep the same speed using trigonometry vectors style
+                    if(xSpeedPower2 >  this.maxSpeedPower2 ){
+                        this.xSpeed = Math.sign(this.xSpeed) * Math.sqrt(this.maxSpeedPower2) * 0.9;
+                        xSpeedPower2 = this.xSpeed * this.xSpeed;
+                    }
+                    //We calculate vertical speed by making it negative and ajust it with horizontal speed and max speed
+                    this.ySpeed = -Math.sqrt(this.maxSpeedPower2 - this.xSpeed*this.xSpeed);
+                    //this.ySpeed -= this.xSpeed;
+                    
                 } else {
                     lives--;
                     if (!lives) {
