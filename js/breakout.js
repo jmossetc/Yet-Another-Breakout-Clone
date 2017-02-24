@@ -7,37 +7,28 @@
  */
 
 //canvas
-canvas = document.getElementById("myCanvas");
-ctx = canvas.getContext("2d");
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 
 //Game variables
-gameOver = false;
-score = 0;
-lives = 3;
+var gameOver = false;
+var score = 0;
+var lives = 3;
 
 //Controls
 var rightPressed = false;
 var leftPressed = false;
 
-//Bricks
+//Level init
+var levelPadding = 30
 var brickRowCount = 3;
-var brickColumnCount = 5;
-var brickPadding = 10;
-var brickOffsetTop = 30;
-var brickOffsetLeft = 30;
-
-//Bricks init
-var brickWidth = 75;
-var brickHeight = 20;
-durability = 1;
-var bricks = [];
-for (c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = initBrick(0, 0, brickWidth, brickHeight, durability);
-    }
-}
-
+var brickColumnCount = 10;
+var brickPadding = 5;
+var brickOffsetTop = 0;
+var brickOffsetLeft = 0;
+var brickWidth = 37;
+var brickHeight = 15;
+var level = initLevel(levelPadding,brickHeight, brickWidth, brickColumnCount, brickRowCount, brickPadding,brickOffsetLeft, brickOffsetTop, 1)
 
 //Paddle init 
 var paddleHeight = 10;
@@ -61,7 +52,7 @@ function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         collisionDetection()
-        drawBricks();
+        level.drawBricks();
         paddle.drawPaddle();
         ball.drawBall(paddle);
         drawScore();
@@ -73,10 +64,8 @@ function draw() {
         //Paddle position to update on key press
         if (rightPressed && paddle.paddleX < canvas.width - paddle.paddleWidth) {
             paddle.paddleX += paddle.paddleSpeed;
-            console.log('test right rightPressed');
         } else if (leftPressed && paddle.paddleX > 0) {
             paddle.paddleX -= paddle.paddleSpeed;
-            console.log('test left rightPressed');
         }
 
 
@@ -84,19 +73,6 @@ function draw() {
     }
 }
 
-function drawBricks() {
-    for (c = 0; c < brickColumnCount; c++) {
-        for (r = 0; r < brickRowCount; r++) {
-            if (bricks[c][r].durability > 0) {
-                var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-                var brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
-                bricks[c][r].drawBrick();
-            }
-        }
-    }
-}
 function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
@@ -111,25 +87,25 @@ function drawLives() {
 function collisionDetection() {
     for (c = 0; c < brickColumnCount; c++) {
         for (r = 0; r < brickRowCount; r++) {
-            var brick = bricks[c][r];
-            if (bricks[c][r].durability > 0) {
+            var brick = level.bricks[c][r];
+            if (brick.durability > 0) {
                 //On brick up or down bar collision, inverse vertical speed
                 if (ball.x > brick.x && ball.x < brick.x + brick.brickWidth && ball.y + ball.ballRadius >= brick.y && ball.y - ball.ballRadius <= brick.y + brick.brickHeight) {
                     ball.ySpeed = -ball.ySpeed;
-                    bricks[c][r].durability--;
+                    level.bricks[c][r].durability--;
                     score++;
                     console.log('vertical collison');
-                    if (score == brickRowCount * brickColumnCount) {
+                    if (score === level.brickRowCount * level.brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
                         gameOver = true;
                     }
-                    //On vertical collision inverse vertical speed
+                    //On horizontal collision inverse vertical speed
                 } else if (ball.y > brick.y && ball.y < brick.y + brick.brickHeight && ball.x + ball.ballRadius >= brick.x && ball.x - ball.ballRadius <= brick.x + brick.brickWidth) {
                     ball.xSpeed = -ball.xSpeed;
-                    bricks[c][r].durability--;
+                    level.bricks[c][r].durability--;
                     score++;
                     console.log('horizontal collison');
-                    if (score == brickRowCount * brickColumnCount) {
+                    if (score === level.brickRowCount * level.brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
                         gameOver = true;
                     }
@@ -150,17 +126,17 @@ function mouseMoveHandler(e) {
 }
 //Key handlers
 function keyDownHandler(e) {
-    if (e.keyCode == 39) {
+    if (e.keyCode === 39) {
         rightPressed = true;
-    } else if (e.keyCode == 37) {
+    } else if (e.keyCode === 37) {
         leftPressed = true;
     }
 }
 
 function keyUpHandler(e) {
-    if (e.keyCode == 39) {
+    if (e.keyCode === 39) {
         rightPressed = false;
-    } else if (e.keyCode == 37) {
+    } else if (e.keyCode === 37) {
         leftPressed = false;
     }
 }

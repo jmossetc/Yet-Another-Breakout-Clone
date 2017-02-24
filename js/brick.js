@@ -17,7 +17,11 @@ function initBrick(xPos, yPos, brickWidth, brickHeight, durability) {
             ctx.beginPath();
             ctx.rect(this.x, this.y, this.brickWidth, this.brickHeight);
             ctx.fillStyle = "#0095DD";
+            ctx.strokeStyle = "#FFB800";
+            ctx.lineWidth=5;
+            ctx.stroke();
             ctx.fill();
+
             ctx.closePath();
         }
 
