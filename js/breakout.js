@@ -49,7 +49,7 @@ var yPos = canvas.height - 30;
 var xSpeed = 2;
 var ySpeed = -2;
 var ballRadius = 10;
-var ball = initBall(xPos, yPos, xSpeed, ySpeed,ballRadius);
+var ball = initBall(xPos, yPos, xSpeed, ySpeed, ballRadius);
 
 draw();
 
@@ -59,12 +59,12 @@ function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         collisionDetection()
-        drawBricks();        
+        drawBricks();
         paddle.drawPaddle();
         ball.drawBall(paddle);
         drawScore();
         drawLives();
-        
+
         ball.checkBorderOrPaddleCollision(paddle);
 
         //Paddle position to update on key press
@@ -74,7 +74,7 @@ function draw() {
             paddle.paddleX -= paddleSpeed;
         }
 
-        
+
         requestAnimationFrame(draw);
     }
 }
@@ -106,12 +106,24 @@ function drawLives() {
 function collisionDetection() {
     for (c = 0; c < brickColumnCount; c++) {
         for (r = 0; r < brickRowCount; r++) {
-            var b = bricks[c][r];
+            var brick = bricks[c][r];
             if (bricks[c][r].durability > 0) {
-                if (ball.x > bricks[c][r].x - ball.ballRadius && ball.x < bricks[c][r].x + brickWidth + ball.ballRadius && ball.y > bricks[c][r].y - ball.ballRadius && ball.y < bricks[c][r].y + brickHeight + ball.ballRadius) {
+                //On brick up or down bar collision, inverse vertical speed
+                if (ball.x > brick.x && ball.x < brick.x + brick.brickWidth && ball.y + ball.ballRadius >= brick.y && ball.y - ball.ballRadius <= brick.y + brick.brickHeight) {
                     ball.ySpeed = -ball.ySpeed;
                     bricks[c][r].durability--;
                     score++;
+                    console.log('vertical collison');
+                    if (score == brickRowCount * brickColumnCount) {
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        gameOver = true;
+                    }
+                    //On vertical collision inverse vertical speed
+                } else if (ball.y > brick.y && ball.y < brick.y + brick.brickHeight && ball.x + ball.ballRadius >= brick.x && ball.x - ball.ballRadius <= brick.x + brick.brickWidth) {
+                    ball.xSpeed = -ball.xSpeed;
+                    bricks[c][r].durability--;
+                    score++;
+                    console.log('horizontal collison');
                     if (score == brickRowCount * brickColumnCount) {
                         alert("YOU WIN, CONGRATULATIONS!");
                         gameOver = true;
