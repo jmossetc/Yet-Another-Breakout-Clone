@@ -22,11 +22,13 @@ var leftPressed = false;
 //Bricks
 var brickRowCount = 3;
 var brickColumnCount = 5;
-var brickWidth = 75;
-var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
+
+//Bricks init
+var brickWidth = 75;
+var brickHeight = 20;
 durability = 1;
 var bricks = [];
 for (c = 0; c < brickColumnCount; c++) {
@@ -40,8 +42,8 @@ for (c = 0; c < brickColumnCount; c++) {
 //Paddle init 
 var paddleHeight = 10;
 var paddleWidth = 200;
-var paddleSpeed = 2;
-var paddle = initPaddle(paddleHeight, paddleWidth, paddleSpeed)
+var paddleSpeed = 5;
+var paddle = initPaddle(paddleHeight, paddleWidth, paddleSpeed);
 
 //Ball init
 var xPos = canvas.width / 2;
@@ -67,11 +69,14 @@ function draw() {
 
         ball.checkBorderOrPaddleCollision(paddle);
 
+
         //Paddle position to update on key press
-        if (rightPressed && paddleX < canvas.width - paddleWidth) {
-            paddle.paddleX += paddleSpeed;
-        } else if (leftPressed && paddleX > 0) {
-            paddle.paddleX -= paddleSpeed;
+        if (rightPressed && paddle.paddleX < canvas.width - paddle.paddleWidth) {
+            paddle.paddleX += paddle.paddleSpeed;
+            console.log('test right rightPressed');
+        } else if (leftPressed && paddle.paddleX > 0) {
+            paddle.paddleX -= paddle.paddleSpeed;
+            console.log('test left rightPressed');
         }
 
 
