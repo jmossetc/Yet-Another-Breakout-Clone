@@ -8,4 +8,4 @@ under MIT license
 
 * { padding: 0; margin: 0; }
 body{background: #ddd;}
-canvas { background: #eee; display: block; margin: 0 auto; }
+canvas { background: #eee; display: block; margin: 0 auto; cursor : ew-resize;}
