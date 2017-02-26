@@ -39,8 +39,8 @@ var paddle = initPaddle(paddleHeight, paddleWidth, paddleSpeed);
 //Ball init
 var xPos = canvas.width / 2;
 var yPos = canvas.height - 30;
-var xSpeed = 3;
-var ySpeed = -3;
+var xSpeed = 2;
+var ySpeed = -2;
 var ballRadius = 5;
 var ball = initBall(xPos, yPos, xSpeed, ySpeed, ballRadius);
 

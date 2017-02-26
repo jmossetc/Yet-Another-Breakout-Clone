@@ -14,7 +14,7 @@ function initBall(xPos, yPos, xSpeed, ySpeed, ballRadius) {
         xSpeed: xSpeed,
         ySpeed: ySpeed,
         ballRadius: ballRadius,
-        maxSpeedPower2 : 18,
+        maxSpeedPower2 : 8,
         drawBall: function () {
             ctx.beginPath();
             //draw a ball at (x,y)
